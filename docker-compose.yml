@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+    src:
+        build:
+            context: .
+        image: python:3.8.0-slim
+        ports:
+            - "8888:8888"
+        working_dir: /src
+        volumes:
+            - ./:/src
