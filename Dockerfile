@@ -1,66 +1,83 @@
-FROM python:3.8.0-slim
+ARG IMAGE_VARIANT=slim
+ARG OPENJDK_VERSION=8
+ARG PYTHON_VERSION=3.9.5
+
+FROM python:${PYTHON_VERSION}-${IMAGE_VARIANT} AS py3
+FROM openjdk:${OPENJDK_VERSION}-${IMAGE_VARIANT}
+COPY --from=py3 / /
+
+ENV SPARK_VERSION 3.1.2
+ENV HADOOP_VERSION 3.2
+ENV MONGO_HADOOP_VERSION 1.5.2
+ENV MONGO_HADOOP_COMMIT r1.5.2
+ENV MONGO_JAVA_DRIVER_VERSION 3.4.0
+
+ENV SPARK_DIR spark-${SPARK_VERSION}-bin-${HADOOP_VERSION}
+ENV SPARK_HOME /usr/local/${SPARK_DIR}
+ENV APACHE_MIRROR https://downloads.apache.org
+ENV SPARK_URL ${APACHE_MIRROR}/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
+
+ENV MONGO_HADOOP_URL https://github.com/mongodb/mongo-hadoop/archive/${MONGO_HADOOP_COMMIT}.tar.gz
+
+ENV MONGO_HADOOP_LIB_PATH /usr/local/mongo-hadoop/build/libs
+ENV MONGO_HADOOP_JAR  ${MONGO_HADOOP_LIB_PATH}/mongo-hadoop-${MONGO_HADOOP_VERSION}.jar
+
+ENV MONGO_HADOOP_SPARK_PATH /usr/local/mongo-hadoop/spark
+ENV MONGO_HADOOP_SPARK_JAR ${MONGO_HADOOP_SPARK_PATH}/build/libs/mongo-hadoop-spark-${MONGO_HADOOP_VERSION}.jar
+ENV PYTHONPATH  ${MONGO_HADOOP_SPARK_PATH}/src/main/python:$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.9-src.zip:/usr/local/lib
+
+ENV MONGO_JAVA_DRIVER_URL https://repo1.maven.org/maven2/org/mongodb/mongo-java-driver/${MONGO_JAVA_DRIVER_VERSION}/mongo-java-driver-${MONGO_JAVA_DRIVER_VERSION}.jar
+
+ENV SPARK_DRIVER_EXTRA_CLASSPATH ${MONGO_HADOOP_JAR}:${MONGO_HADOOP_SPARK_JAR}
+ENV CLASSPATH ${SPARK_DRIVER_EXTRA_CLASSPATH}
+ENV JARS ${MONGO_HADOOP_JAR},${MONGO_HADOOP_SPARK_JAR}
+
+ENV PYSPARK_DRIVER_PYTHON /usr/bin/ipython
+ENV PATH $PATH:$SPARK_HOME/bin
+
+ENV NB_USER spark
+ENV NB_UID 1000
 
 RUN apt-get update && \
-    apt-get install gcc -y && \
+    apt-get install -y wget && \
     apt-get clean && \
+    apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
 
-# Spark dependencies
-# Default values can be overridden at build time
-# (ARGS are in lower case to distinguish them from ENV)
-ARG spark_version="3.1.2"
-ARG hadoop_version="3.2"
-ARG spark_checksum="2385CB772F21B014CE2ABD6B8F5E815721580D6E8BC42A26D70BBCDDA8D303D886A6F12B36D40F6971B5547B70FAE62B5A96146F0421CB93D4E51491308EF5D5"
+# Download  Spark -> /usr/local/spark-3.1.2-bin-hadoop3.2
+RUN wget -qO - ${SPARK_URL} | tar -xz -C /usr/local/
 
-ENV APACHE_SPARK_VERSION="${spark_version}" \
-    HADOOP_VERSION="${hadoop_version}"
+# download mongo-java-driver -> /usr/local/lib
+RUN wget -q ${MONGO_JAVA_DRIVER_URL} && \
+    mv mongo-java-driver-${MONGO_JAVA_DRIVER_VERSION}.jar /usr/local/lib
 
-# JAVA
-ENV JAVA_FOLDER=java-se-8u41-ri
-ENV JVM_ROOT=/usr/lib/jvm/
-ENV JAVA_PKG_NAME=openjdk-8u41-b04-linux-x64-14_jan_2020.tar.gz
-ENV JAVA_TAR_GZ_URL=https://download.java.net/openjdk/jdk8u41/ri/$JAVA_PKG_NAME
-ENV JAVA_HOME=/usr/lib/jvm/java-se-8u41-ri/
-RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*    && \
-    apt-get clean                                                               && \
-    apt-get autoremove                                                          && \
-    echo Downloading $JAVA_TAR_GZ_URL                                           && \
-    wget -q $JAVA_TAR_GZ_URL                                                    && \
-    tar -xvf $JAVA_PKG_NAME                                                     && \
-    rm $JAVA_PKG_NAME                                                           && \
-    mkdir -p /usr/lib/jvm/                                                      && \
-    mv ./$JAVA_FOLDER $JVM_ROOT
+# download mongo-hadoop -> /usr/local/mongo-hadoop
+RUN wget -qO - ${MONGO_HADOOP_URL} | tar -xz -C /usr/local/ && \
+    mv /usr/local/mongo-hadoop-${MONGO_HADOOP_COMMIT} /usr/local/mongo-hadoop && \
+    cd /usr/local/mongo-hadoop && \
+    ./gradlew jar &&\
+    cd .. && \
+    cp mongo-hadoop/spark/build/libs/mongo-hadoop-spark-*.jar lib/ && \
+    cp mongo-hadoop/build/libs/mongo-hadoop-*.jar lib/ && \
+    python mongo-hadoop/spark/src/main/python/setup.py install
 
-# Spark installation
-WORKDIR /tmp
-RUN wget "https://downloads.apache.org/spark/spark-${APACHE_SPARK_VERSION}/spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" && \
-    echo "${spark_checksum} *spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" | sha512sum -c - && \
-    tar xzf "spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" -C /usr/local --owner root --group root --no-same-owner && \
-    rm "spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz"
+RUN cp /usr/local/mongo-hadoop/spark/src/main/python/pymongo_spark.py lib/ && \
+    echo "PYTHONPATH=$PYTHONPATH:/usr/local/lib" >> ~/.bash_profile
 
-WORKDIR /usr/local
-
-# Configure Spark
-ENV SPARK_HOME=/usr/local/spark
-ENV SPARK_OPTS="--driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info" \
-    PATH="${PATH}:${SPARK_HOME}/bin"
-RUN ln -s "spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}" spark && \
-    # Add a link in the before_notebook hook in order to source automatically PYTHONPATH
-    mkdir -p /usr/local/bin/before-notebook.d && \
+RUN mkdir -p /usr/local/bin/before-notebook.d && \
     ln -s "${SPARK_HOME}/sbin/spark-config.sh" /usr/local/bin/before-notebook.d/spark-config.sh
-RUN cp -p "${SPARK_HOME}/conf/spark-defaults.conf.template" "${SPARK_HOME}/conf/spark-defaults.conf" && \
-    echo 'spark.driver.extraJavaOptions -Dio.netty.tryReflectionSetAccessible=true' >> "${SPARK_HOME}/conf/spark-defaults.conf" && \
-    echo 'spark.executor.extraJavaOptions -Dio.netty.tryReflectionSetAccessible=true' >> "${SPARK_HOME}/conf/spark-defaults.conf"
-    
-COPY ./requirements.txt /requirements.txt
 
-WORKDIR /src
+RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER
+
+COPY ./requirements.txt /requirements.txt
+WORKDIR /app
 
 RUN pip install --upgrade pip && \
     pip install --user --no-cache-dir -r /requirements.txt && \
     pip install jupyter
 
-COPY . /src/
+COPY . /app/
+RUN chmod +x /app/append_jars_to_spark_conf.sh
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 ENV TINI_VERSION v0.6.0

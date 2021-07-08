@@ -1,12 +1,23 @@
 version: "3"
 
 services:
-    src:
+    app:
         build:
             context: .
-        image: python:3.8.0-slim
+        image: gerardovitale/covid-project
+        container_name: covid-project
         ports:
             - "8888:8888"
-        working_dir: /src
+        working_dir: /app
         volumes:
-            - ./:/src
+            - ./:/app
+        depends_on:
+            - mongo_db
+
+    mongo_db:
+        image: mongo:3.2
+        container_name: mongo_db
+        ports: 
+            - "27017:27017"
+        volumes: 
+            - /usr/local/var/mongodb:/data/db
