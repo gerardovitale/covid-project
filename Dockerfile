@@ -47,23 +47,6 @@ RUN apt-get update && \
 # Download  Spark -> /usr/local/spark-3.1.2-bin-hadoop3.2
 RUN wget -qO - ${SPARK_URL} | tar -xz -C /usr/local/
 
-# download mongo-java-driver -> /usr/local/lib
-RUN wget -q ${MONGO_JAVA_DRIVER_URL} && \
-    mv mongo-java-driver-${MONGO_JAVA_DRIVER_VERSION}.jar /usr/local/lib
-
-# download mongo-hadoop -> /usr/local/mongo-hadoop
-RUN wget -qO - ${MONGO_HADOOP_URL} | tar -xz -C /usr/local/ && \
-    mv /usr/local/mongo-hadoop-${MONGO_HADOOP_COMMIT} /usr/local/mongo-hadoop && \
-    cd /usr/local/mongo-hadoop && \
-    ./gradlew jar &&\
-    cd .. && \
-    cp mongo-hadoop/spark/build/libs/mongo-hadoop-spark-*.jar lib/ && \
-    cp mongo-hadoop/build/libs/mongo-hadoop-*.jar lib/ && \
-    python mongo-hadoop/spark/src/main/python/setup.py install
-
-RUN cp /usr/local/mongo-hadoop/spark/src/main/python/pymongo_spark.py lib/ && \
-    echo "PYTHONPATH=$PYTHONPATH:/usr/local/lib" >> ~/.bash_profile
-
 RUN mkdir -p /usr/local/bin/before-notebook.d && \
     ln -s "${SPARK_HOME}/sbin/spark-config.sh" /usr/local/bin/before-notebook.d/spark-config.sh
 
@@ -77,7 +60,6 @@ RUN pip install --upgrade pip && \
     pip install jupyter
 
 COPY . /app/
-RUN chmod +x /app/append_jars_to_spark_conf.sh
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 ENV TINI_VERSION v0.6.0
