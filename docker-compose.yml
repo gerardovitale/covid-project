@@ -3,16 +3,28 @@ version: "3"
 services:
     app:
         build:
-            context: .
+            context: ./app
         image: gerardovitale/covid-project
         container_name: covid-project
         ports:
             - "8888:8888"
         working_dir: /app
         volumes:
-            - ./:/app
+            - ./app/:/app
         depends_on:
             - mongo_db
+
+    api:
+        build:
+            context: ./api
+        image: gerardovitale/covid-api
+        container_name: covid-api
+        ports:
+            - "5000:5000"
+        working_dir: /api
+        command: sh -c "python app.py"
+        volumes:
+            - ./api/:/api
 
     mongo_db:
         image: mongo:3.2
