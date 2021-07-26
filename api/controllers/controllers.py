@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 from pymongo import MongoClient
-from datetime import datetime
 
 app = Flask(__name__)
 database = MongoClient(host='mongodb://mongo_db', 
@@ -25,19 +24,18 @@ def home():
 
 
 @app.route('/covid_deaths', methods=['GET'])
-def get_covid_deaths_per_months():
+def get_covid_deaths_summary_per_date():
     location = request.args.get('location')
     date = request.args.get('date')
     query = {'location': location, 'date': date}
-    project = {'country': 1, 'date': 1, 'new_deaths': 1}
-    new_deaths = list(database['covid_deaths'].find(query, project))
-    print(location,new_deaths)
+    project = {'_id':0, 
+               'location': 1, 
+               'date': 1, 
+               'new_deaths': 1,
+               'new_cases':1,}
+    result = list(database['covid_deaths'].find(query, project))[0]
     return {
-        'result': {
-            'location': location,
-            'date': date,
-            'new_deaths': new_deaths
-        },
+        'result': result,
         'route': '/covid_deaths',
         'status': 200,
     }
