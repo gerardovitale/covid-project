@@ -1,4 +1,4 @@
-from controllers.home_controller import app
+from controllers.controllers import app
 
 
 if __name__ == "__main__":
