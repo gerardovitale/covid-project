@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block body %}
+<style>
+  .center-table{
+    padding-left: 2.5%;
+    padding-right: 20%;
+  }
+  .table td, .table th{
+    width: 1%;
+    white-space: nowrap;
+  }
+</style>
+  <div class="center-table">
+    <p class="lead">Covid-19 Summary</p>
+    <table class="table table-condensed table-striped" style="width: auto">
+      <thead>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Population</th>
+        <th>New Deaths</th>
+        <th>New Cases</th>
+        <th>ICU Patients</th>
+        <th>Hosp Patients</th>
+        <th>Total Cases</th>
+        <th>Total Deaths</th>
+        <th>Infected Rate</th>
+        <th>Death Rate</th>
+      </thead>
+      <tbody>
+        {% for item in output %}
+        <tr>
+          <td>{{item.date}}</td>
+          <td>{{item.location}}</td>
+          <td>{{item.population}}</td>
+          <td>{{item.new_deaths}}</td>
+          <td>{{item.new_cases}}</td>
+          <td>{{item.icu_patients}}</td>
+          <td>{{item.hosp_patients}}</td>
+          <td>{{item.total_cases}}</td>
+          <td>{{item.total_deaths}}</td>
+          <td>{{item.infected_rate}}</td>
+          <td>{{item.death_rate}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
