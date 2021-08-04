@@ -4,6 +4,7 @@ from flask import Flask, render_template, request
 from pymongo import MongoClient
 
 from services.covid_summary_service import find_covid_data
+from controllers.helpers import get_url_query_params
 
 app = Flask(__name__, template_folder='templates')
 database = MongoClient(host='mongodb://mongo_db:27017')\
@@ -28,10 +29,7 @@ def home():
 
 @app.route('/covid_summary.json', methods=['GET'])
 def get_covid_summary():
-    location = request.args.get('location').capitalize()
-    days = int(request.args.get('days')) \
-            if request.args.get('days') is not None \
-            else 10
+    location, days = get_url_query_params(request)
     summary = find_covid_data(database, days, location)
     return {
         'result': summary,
@@ -42,9 +40,6 @@ def get_covid_summary():
 
 @app.route('/covid_summary', methods=['GET'])
 def get_covid_summary_html():
-    location = request.args.get('location').capitalize()
-    days = int(request.args.get('days')) \
-            if request.args.get('days') is not None \
-            else 10
+    location, days = get_url_query_params(request)
     summary = find_covid_data(database, days, location)
     return render_template('covid_summary.html', output=summary)
