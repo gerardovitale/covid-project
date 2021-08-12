@@ -8,7 +8,7 @@ def get_params_covid_summary(req: Request) -> Tuple[str, int]:
     return location, int(days)
 
 
-def get_navigation_offsets(offset1, offset2, increment) -> Dict[str, Any]:
+def get_navigation_offsets(offset1: int, offset2: int, increment: int) -> Dict[str, Any]:
     offsets = {}
     offsets['Next'] = {'top_offset': offset2 + increment,
                        'bottom_offset': offset1 + increment}
