@@ -5,8 +5,7 @@ from services.covid_summary_service import (find_covid_summary,
                                             calculate_rates, 
                                             paginate_mongo_data)
 from controllers.helpers import (get_params_covid_summary, 
-                                 get_params_pagination,
-                                 get_navigation_offsets)
+                                 get_params_pagination)
 
 
 app = Flask(__name__, template_folder='templates')
