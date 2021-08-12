@@ -21,7 +21,7 @@ def find_covid_summary(database: MongoClient, days: int, location: str) -> Curso
                'total_cases':1,
                'total_deaths':1}
     result = database['covid_deaths'].find(query, project).sort('date', DESCENDING)
-    return result, to_date, from_date
+    return result
 
 
 def paginate_mongo_data(mongo_data: CursorType, start: int, width: int) -> CursorType:
