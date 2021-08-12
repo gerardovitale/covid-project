@@ -4,7 +4,7 @@ from typing import Any, Dict
 from pymongo import MongoClient
 
 
-def find_covid_data(database: MongoClient, days: int, location: str) -> Dict[str, Any]:
+def find_covid_summary(database: MongoClient, days: int, location: str) -> Dict[str, Any]:
     to_date = datetime.datetime.today()
     from_date = to_date - datetime.timedelta(days=days)
     query = {'$and': [{'date': {'$gte': from_date,
