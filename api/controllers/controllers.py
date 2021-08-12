@@ -1,8 +1,12 @@
 from flask import Flask, render_template, request
 from pymongo import MongoClient
 
-from services.covid_summary_service import find_covid_summary
-from controllers.helpers import get_query_url_params_covid_summary
+from services.covid_summary_service import (find_covid_summary, 
+                                            calculate_rates, 
+                                            paginate_mongo_data)
+from controllers.helpers import (get_params_covid_summary, 
+                                 get_params_pagination,
+                                 get_navigation_offsets)
 
 
 app = Flask(__name__, template_folder='templates')
@@ -28,7 +32,7 @@ def home():
 
 @app.route('/covid_summary.json', methods=['GET'])
 def get_covid_summary():
-    location, days = get_query_url_params_covid_summary(request)
+    location, days = get_params_covid_summary(request)
     summary = find_covid_summary(database, days, location)
     return {
         'result': summary,
@@ -39,6 +43,18 @@ def get_covid_summary():
 
 @app.route('/covid_summary', methods=['GET'])
 def get_covid_summary_html():
-    location, days = get_query_url_params_covid_summary(request)
+    location, days = get_params_covid_summary(request)
+    start, width, nav_offsets = get_params_pagination(request)
     summary = find_covid_summary(database, days, location)
-    return render_template('covid_summary.html', output=summary)
+    summary = paginate_mongo_data(summary, start, width)
+    record_count = summary.count()
+    summary = calculate_rates(summary)
+    return render_template(
+        'covid_summary.html',
+        output=summary,
+        location=location,
+        days=days,
+        record_count=record_count,
+        nav_path=request.path,
+        nav_offsets=nav_offsets
+    )

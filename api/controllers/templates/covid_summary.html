@@ -14,6 +14,7 @@
     <p class="lead">Summary</p>
     <table class="table table-condensed table-striped" style="width: auto">
       <thead>
+        <th>#</th>
         <th>Date</th>
         <th>Location</th>
         <th>Population</th>
@@ -29,6 +30,7 @@
       <tbody>
         {% for item in output %}
         <tr>
+          <td>{{loop.index}}</td>
           <td>{{item.date}}</td>
           <td>{{item.location}}</td>
           <td>{{item.population}}</td>
@@ -45,4 +47,8 @@
       </tbody>
     </table>
   </div>
+  {% import "macros.jnj" as common %}
+  {% if nav_offsets and nav_path -%}
+    {{ common.display_nav(nav_offsets, nav_path, record_count, location, days, query)|safe }}
+  {% endif -%}
 {% endblock %}
