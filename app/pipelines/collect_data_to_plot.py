@@ -1,10 +1,10 @@
-from pyspark.sql import SparkSession
+from pyspark.sql import DataFrame
 
 from config.mongo_uri import MONGODB_URI_COVID_DEATHS
 from config.spark_session import spark
 
 
-def collect_total_new_cases():
+def collect_total_new_cases() -> DataFrame:
     covid_deaths = spark.read.format('mongo')\
                              .option('uri', MONGODB_URI_COVID_DEATHS)\
                              .load()
@@ -17,6 +17,4 @@ def collect_total_new_cases():
         GROUP BY location, YEAR(date), MONTH(date)
         ORDER BY location, YEAR(date), MONTH(date)
     ''')
-    
     return total_new_cases_per_month_and_country
-
