@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING
 
 from services.covid_summary_service import (find_covid_summary, 
                                             calculate_rates, 
                                             paginate_mongo_data)
+from services.covid_new_cases_service import find_covid_new_cases
 from controllers.helpers import (get_params_covid_summary, 
                                  get_params_pagination)
 
@@ -56,4 +57,26 @@ def get_covid_summary_html():
         record_count=record_count,
         nav_path=request.path,
         nav_offsets=nav_offsets
+    )
+
+
+@app.route('/covid_new_cases.json/<location>', methods=['GET'])
+def get_covid_new_cases_per_location(location: str):
+    location = location.capitalize()
+    result = find_covid_new_cases(database, location)
+    return {
+        'result': list(result),
+        'route': f'/covid_new_cases/{location}',
+        'status': 200,
+    }
+
+
+@app.route('/covid_new_cases/<location>', methods=['GET'])
+def get_covid_new_cases_per_location_html(location: str):
+    location = location.capitalize()
+    result = find_covid_new_cases(database, location)
+    return render_template(
+        'covid_new_cases.html',
+        output=list(result),
+        location=location
     )
