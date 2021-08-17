@@ -1,0 +1,11 @@
+{% extends "chart_layout.html" %}
+{% block body %}
+<input type="hidden" value="{{ location }}" id="country">
+<section class="cols-2">
+    <figure>
+        <p>Covid New Cases Trends</p>
+        <h3>Country: {{ location }}</h3>
+        <canvas id="chart"></canvas>
+    </figure>
+<script src="../static/js/covidNewCasesChart.js" type="application/javascript"></script>
+{% endblock %}
