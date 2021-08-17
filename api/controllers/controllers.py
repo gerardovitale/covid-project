@@ -10,7 +10,14 @@ from controllers.helpers import (get_params_covid_summary,
 
 
 template_folder = '../views/templates'
-app = Flask(__name__, template_folder=template_folder)
+stattic_folder = '../views/static'
+
+app = Flask(
+    __name__, 
+    template_folder=template_folder, 
+    static_folder=stattic_folder
+)
+
 database = MongoClient(host='mongodb://mongo_db:27017')\
             .get_database('covid-project')
 
@@ -25,6 +32,7 @@ def home():
                 '/',
                 '/covid_summary',
                 '/covid_new_cases/<location>',
+                '/covid_new_cases_chart/<location>',
             ],
         },
         'route': '/',
@@ -80,5 +88,14 @@ def get_covid_new_cases_per_location_html(location: str):
     return render_template(
         'covid_new_cases.html',
         output=list(result),
+        location=location
+    )
+
+
+@app.route('/covid_new_cases_chart/<location>', methods=['GET'])
+def get_covid_new_cases_chart(location: str):
+    location = location.capitalize()
+    return render_template(
+        'covid_new_cases_chart.html',
         location=location
     )
