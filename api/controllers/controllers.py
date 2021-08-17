@@ -9,7 +9,8 @@ from controllers.helpers import (get_params_covid_summary,
                                  get_params_pagination)
 
 
-app = Flask(__name__, template_folder='templates')
+template_folder = '../views/templates'
+app = Flask(__name__, template_folder=template_folder)
 database = MongoClient(host='mongodb://mongo_db:27017')\
             .get_database('covid-project')
 
