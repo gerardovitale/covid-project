@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from pymongo import MongoClient, ASCENDING
+from pymongo import MongoClient
 
 from services.covid_summary_service import (find_covid_summary, 
                                             calculate_rates, 
@@ -24,6 +24,7 @@ def home():
             'endpoints': [
                 '/',
                 '/covid_summary',
+                '/covid_new_cases/<location>',
             ],
         },
         'route': '/',
