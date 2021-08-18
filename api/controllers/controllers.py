@@ -28,19 +28,26 @@ def home():
         'result': {
             'api': 'covid-api',
             'documentation': '<isert_url>',
-            'endpoints': [
-                '/',
-                '/covid_summary',
-                '/covid_new_cases/<location>',
-                '/covid_new_cases_chart/<location>',
-            ],
+            'endpoints': {
+                'json_format': [
+                    '/covid_summary/json',
+                    '/covid_new_cases/json/<location>',
+                ],
+                'tables': [
+                    '/covid_summary/table',
+                    '/covid_new_cases/table/<location>',
+                ],
+                'chart': [
+                    '/covid_new_cases/chart/<location>'
+                ]
+            }
         },
         'route': '/',
         'status': 200,
     }
 
 
-@app.route('/covid_summary.json', methods=['GET'])
+@app.route('/covid_summary/json', methods=['GET'])
 def get_covid_summary():
     location, days = get_params_covid_summary(request)
     summary = find_covid_summary(database, days, location)
@@ -51,7 +58,7 @@ def get_covid_summary():
     }
 
 
-@app.route('/covid_summary', methods=['GET'])
+@app.route('/covid_summary/table', methods=['GET'])
 def get_covid_summary_html():
     location, days = get_params_covid_summary(request)
     start, width, nav_offsets = get_params_pagination(request)
@@ -70,7 +77,7 @@ def get_covid_summary_html():
     )
 
 
-@app.route('/covid_new_cases.json/<location>', methods=['GET'])
+@app.route('/covid_new_cases/json/<location>', methods=['GET'])
 def get_covid_new_cases_per_location(location: str):
     location = location.capitalize()
     result = find_covid_new_cases(database, location)
@@ -81,7 +88,7 @@ def get_covid_new_cases_per_location(location: str):
     }
 
 
-@app.route('/covid_new_cases/<location>', methods=['GET'])
+@app.route('/covid_new_cases/table/<location>', methods=['GET'])
 def get_covid_new_cases_per_location_html(location: str):
     location = location.capitalize()
     result = find_covid_new_cases(database, location)
@@ -92,7 +99,7 @@ def get_covid_new_cases_per_location_html(location: str):
     )
 
 
-@app.route('/covid_new_cases_chart/<location>', methods=['GET'])
+@app.route('/covid_new_cases/chart/<location>', methods=['GET'])
 def get_covid_new_cases_chart(location: str):
     location = location.capitalize()
     return render_template(
