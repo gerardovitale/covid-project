@@ -1,25 +1,12 @@
-from flask import Flask, render_template, request
-from pymongo import MongoClient
+from flask import render_template, request
 
-from services.covid_summary_service import (find_covid_summary, 
-                                            calculate_rates, 
-                                            paginate_mongo_data)
-from services.covid_new_cases_service import find_covid_new_cases
-from controllers.helpers import (get_params_covid_summary, 
-                                 get_params_pagination)
-
-
-template_folder = '../views/templates'
-stattic_folder = '../views/static'
-
-app = Flask(
-    __name__, 
-    template_folder=template_folder, 
-    static_folder=stattic_folder
-)
-
-database = MongoClient(host='mongodb://mongo_db:27017')\
-            .get_database('covid-project')
+from application import app, database
+from application.controllers.helpers import (get_params_covid_summary,
+                                             get_params_pagination)
+from application.services.covid_new_cases_service import find_covid_new_cases
+from application.services.covid_summary_service import (calculate_rates,
+                                                        find_covid_summary,
+                                                        paginate_mongo_data)
 
 
 @app.route('/', methods=['GET'])
@@ -52,7 +39,7 @@ def get_covid_summary():
     location, days = get_params_covid_summary(request)
     summary = find_covid_summary(database, days, location)
     return {
-        'result': summary,
+        'result': list(summary),
         'route': '/covid_summary',
         'status': 200,
     }

@@ -1,4 +1,4 @@
-from controllers.controllers import app, DevelopmentConfig
+from application import app, DevelopmentConfig
 
 
 if __name__ == "__main__":
