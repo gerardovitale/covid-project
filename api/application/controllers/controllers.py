@@ -17,11 +17,11 @@ def home():
             'documentation': '<isert_url>',
             'endpoints': {
                 'json_format': [
-                    '/covid_summary/json',
+                    '/covid_summary/json/<location>',
                     '/covid_new_cases/json/<location>',
                 ],
                 'tables': [
-                    '/covid_summary/table',
+                    '/covid_summary/table/<location>',
                     '/covid_new_cases/table/<location>',
                 ],
                 'chart': [
@@ -34,9 +34,9 @@ def home():
     }
 
 
-@app.route('/covid_summary/json', methods=['GET'])
-def get_covid_summary():
-    location, days = get_params_covid_summary(request)
+@app.route('/covid_summary/json/<location>', methods=['GET'])
+def get_covid_summary(location: str):
+    location, days = get_params_covid_summary(request, location)
     summary = find_covid_summary(database, days, location)
     return {
         'result': list(summary),
@@ -45,9 +45,9 @@ def get_covid_summary():
     }
 
 
-@app.route('/covid_summary/table', methods=['GET'])
-def get_covid_summary_html():
-    location, days = get_params_covid_summary(request)
+@app.route('/covid_summary/table/<location>', methods=['GET'])
+def get_covid_summary_html(location: str):
+    location, days = get_params_covid_summary(request, location)
     start, width, nav_offsets = get_params_pagination(request)
     summary = find_covid_summary(database, days, location)
     summary = paginate_mongo_data(summary, start, width)

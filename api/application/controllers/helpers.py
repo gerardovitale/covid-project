@@ -2,8 +2,8 @@ from typing import Any, Dict, Tuple
 from flask import Request
 
 
-def get_params_covid_summary(req: Request) -> Tuple[str, int]:
-    location = req.args.get('location').capitalize()
+def get_params_covid_summary(req: Request, location: str) -> Tuple[str, int]:
+    location = location.capitalize()
     days = req.args.get('days') or 10
     return location, int(days)
 
