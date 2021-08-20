@@ -10,17 +10,17 @@ def find_covid_summary(database: MongoClient, days: int, location: str) -> Curso
     query = {'$and': [{'date': {'$gte': from_date,
                                 '$lte': to_date}},
                       {'location': location}]}
-    project = {'_id':0,
+    project = {'_id': 0,
                'date': 1,
                'location': 1,
-               'population':1,
+               'population': 1,
                'new_deaths': 1,
-               'new_cases':1,
-               'icu_patients':1,
-               'hosp_patients':1,
-               'total_cases':1,
-               'total_deaths':1}
-    result = database['covid_deaths'].find(query, project).sort('date', DESCENDING)
+               'new_cases': 1,
+               'icu_patients': 1,
+               'hosp_patients': 1,
+               'total_cases': 1,
+               'total_deaths': 1}
+    result = database['covid_dataset'].find(query, project).sort('date', DESCENDING)
     return result
 
 
