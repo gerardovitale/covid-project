@@ -2,20 +2,25 @@ import datetime
 import sys
 from typing import Dict
 
+import numpy as np
 import pandas as pd
 
 from config.mongo_config import MONGODB_URI_COVID, client
 from config.spark_session import spark
+from pipelines.resources.time_it import time_it
 from pipelines.resources.remove_files import remove_files
 
 COVID_URL = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
 COVID_FILE_NAME = 'covid_dataset'
 
 
+@time_it
 def get_covid_data(strTime_to_dateObject=False) -> pd.DataFrame:
     web_data = pd.read_csv(COVID_URL)
     print(f'[INFO] url read -> {COVID_URL}')
     web_data = web_data[web_data.continent.notnull()]
+    web_data.new_deaths = web_data.new_deaths.apply(
+        lambda x: 0 if np.isnan(x) else x)
     web_data.tests_units = web_data.tests_units.apply(
         lambda string: string if type(string) == str else 'not available')
     if strTime_to_dateObject:
@@ -24,16 +29,11 @@ def get_covid_data(strTime_to_dateObject=False) -> pd.DataFrame:
     return web_data
 
 
+@time_it
 def save_covid_data(df: pd.DataFrame) -> None:
     spark_df = spark.createDataFrame(df)
     try:
-        remove_files([f'data/{COVID_FILE_NAME}.jsonl.gz',
-                      f'data/{COVID_FILE_NAME}.parquet'])
-
-        spark_df.toJSON().saveAsTextFile(f'data/{COVID_FILE_NAME}.jsonl.gz',
-                                         'org.apache.hadoop.io.compress.GzipCodec')
-        print(f'[INFO] jsonl.gz files created: data/{COVID_FILE_NAME}.jsonl.gz')
-
+        remove_files([f'data/{COVID_FILE_NAME}.parquet'])
         spark_df.write.parquet(f'data/{COVID_FILE_NAME}.parquet')
         print(f'[INFO] parquet files created: data/{COVID_FILE_NAME}.parquet')
     except:
