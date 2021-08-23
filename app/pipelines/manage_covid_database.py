@@ -19,7 +19,8 @@ def get_covid_data(strTime_to_dateObject=False) -> pd.DataFrame:
     web_data.tests_units = web_data.tests_units.apply(
         lambda string: string if type(string) == str else 'not available')
     if strTime_to_dateObject:
-        web_data.date = web_data.date.apply(lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))
+        web_data.date = web_data.date.apply(
+            lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))
     return web_data
 
 
