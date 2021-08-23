@@ -10,4 +10,7 @@ app = Flask(
     static_folder=DevelopmentConfig.STATIC_FOLDER,
 )
 
-import application.controllers.controllers
+import application.controllers.home_controller
+import application.controllers.covid_summary_controller
+import application.controllers.covid_new_cases_controller
+import application.controllers.covid_new_deaths_controller
