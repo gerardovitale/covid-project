@@ -1,13 +1,12 @@
-from notebooks.resources.update_local_data import (get_covid_data,
-                                                   rearrenge_data)
-
+from pipelines.manage_covid_database import (get_covid_data,
+                                             save_covid_data)
 from pipelines.publish_data_to_mongo import (publish_covid_dataset,
                                              publish_total_new_cases_chart_data)
 
 
 if __name__ == "__main__":
-    get_covid_data()
-    rearrenge_data()
+    dataset = get_covid_data()
+    save_covid_data(dataset)
 
     publish_covid_dataset()
 

@@ -1,6 +1,6 @@
 from pyspark.sql import DataFrame
 
-from config.mongo_uri import MONGODB_URI_COVID
+from config.mongo_config import MONGODB_URI_COVID
 from config.spark_session import spark
 
 

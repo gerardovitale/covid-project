@@ -1,7 +1,7 @@
 from pyspark.sql.functions import to_timestamp
 
 from config.spark_session import spark
-from config.mongo_uri import MONGODB_URI
+from config.mongo_config import MONGODB_URI
 
 from pipelines.collect_data_to_plot import collect_total_new_cases
 
