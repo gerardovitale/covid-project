@@ -12,9 +12,11 @@ from application.services.covid_summary_service import (calculate_rates,
 def get_covid_summary(location: str):
     location, days = get_params_covid_summary(request, location)
     summary = find_covid_summary(database, days, location)
+    record_count = summary.count()
     return {
         'result': list(summary),
-        'route': '/covid_summary',
+        'result_count': record_count,
+        'route': f'/covid_summary/json/{location}',
         'status': 200,
     }
 

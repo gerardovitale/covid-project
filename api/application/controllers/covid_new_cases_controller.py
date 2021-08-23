@@ -9,9 +9,11 @@ from application.services.covid_new_cases_service import find_covid_new_cases
 def get_covid_new_cases_per_location(location: str):
     location = location.capitalize()
     result = find_covid_new_cases(database, location)
+    record_count = result.count()
     return {
         'result': list(result),
-        'route': f'/covid_new_cases/{location}',
+        'result_count': record_count,
+        'route': f'/covid_new_cases/json/{location}',
         'status': 200,
     }
 
