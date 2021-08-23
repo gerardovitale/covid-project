@@ -7,7 +7,7 @@ def remove_files(files: List[str]) -> None:
     for file in files:
         if os.path.isfile(file):
             os.remove(file)
-            print(f'{file} has been removed')
+            print(f'[INFO] {file} has been removed')
         elif os.path.isdir(file):
             rmtree(file)
-            print(f'{file} has been removed')
+            print(f'[INFO] {file} has been removed')
