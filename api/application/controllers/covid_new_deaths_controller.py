@@ -16,3 +16,14 @@ def get_covid_new_deaths_per_location(location: str):
         'route': f'/covid_new_cases/json/{location}',
         'status': 200,
     }
+
+
+@app.route('/covid_new_deaths/table/<location>', methods=['GET'])
+def get_covid_new_deaths_per_location_html(location: str):
+    location = location.capitalize()
+    result = find_covid_new_deaths(database, location)
+    return render_template(
+        'covid_new_deaths.html',
+        output=list(result),
+        location=location
+    )

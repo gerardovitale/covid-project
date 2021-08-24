@@ -11,13 +11,15 @@ def home():
                 'json_format': [
                     '/covid_summary/json/<location>',
                     '/covid_new_cases/json/<location>',
+                    '/covid_new_deaths/json/<location>',
                 ],
                 'tables': [
                     '/covid_summary/table/<location>',
                     '/covid_new_cases/table/<location>',
+                    '/covid_new_deaths/table/<location>',
                 ],
                 'chart': [
-                    '/covid_new_cases/chart/<location>'
+                    '/covid_new_cases/chart/<location>',
                 ]
             }
         },

@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block body %}
+<style>
+  .center-table{
+    padding-left: 2.5%;
+    padding-right: 20%;
+  }
+  .table td, .table th{
+    width: 1%;
+    white-space: nowrap;
+  }
+</style>
+  <div class="center-table">
+    <p class="lead">Covid New Deaths Summary for {{location}}</p>
+    <table class="table table-condensed table-striped" style="width: auto">
+      <thead>
+        <th>#</th>
+        <th>Year</th>
+        <th>Month</th>
+        <th>Total New Deaths</th>
+      </thead>
+      <tbody>
+        {% for item in output %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{item.year}}</td>
+          <td>{{item.month}}</td>
+          <td>{{item.total_new_deaths}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
