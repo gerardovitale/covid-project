@@ -15,14 +15,21 @@ COVID_FILE_NAME = 'covid_dataset'
 
 
 @time_it
-def get_covid_data(strTime_to_dateObject=False) -> pd.DataFrame:
+def get_covid_dataset(strTime_to_dateObject=False) -> pd.DataFrame:
     web_data = pd.read_csv(COVID_URL)
     print(f'[INFO] url read -> {COVID_URL}')
+
     web_data = web_data[web_data.continent.notnull()]
-    web_data.new_deaths = web_data.new_deaths.apply(
-        lambda x: 0 if np.isnan(x) else x)
-    web_data.tests_units = web_data.tests_units.apply(
-        lambda string: string if type(string) == str else 'not available')
+
+    mask = web_data.new_cases.isnull()
+    web_data.loc[mask, 'new_cases'] = 0
+
+    mask = web_data.new_deaths.isnull()
+    web_data.loc[mask, 'new_deaths'] = 0
+
+    mask = web_data.tests_units.isnull()
+    web_data.loc[mask, 'tests_units'] = 'not available'
+
     if strTime_to_dateObject:
         web_data.date = web_data.date.apply(
             lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'))
