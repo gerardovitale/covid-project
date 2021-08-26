@@ -15,7 +15,6 @@ def collect_total_new_cases() -> DataFrame:
         SELECT YEAR(date) as year, MONTH(date) as month, 
             location, SUM(new_cases) as total_new_cases
         FROM mongo_covid
-        WHERE continent IS NOT NULL
         GROUP BY location, YEAR(date), MONTH(date)
         ORDER BY location, YEAR(date), MONTH(date)
     ''')
@@ -32,7 +31,6 @@ def collect_total_new_deaths() -> DataFrame:
         SELECT YEAR(date) as year, MONTH(date) as month, 
             location, SUM(new_deaths) as total_new_deaths
         FROM mongo_covid
-        WHERE continent IS NOT NULL
         GROUP BY location, YEAR(date), MONTH(date)
         ORDER BY location, YEAR(date), MONTH(date)
     ''')
