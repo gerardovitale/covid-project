@@ -48,6 +48,19 @@ def save_covid_data(df: pd.DataFrame) -> None:
         raise
 
 
+@time_it
+def correct_january_records_mongodb():
+    database = client.get_database('covid-project')
+    locations = database.covid_dataset.distinct('location')
+    list_to_insert = list()
+    for each_loc in locations:
+        list_to_insert.append({'location': each_loc,
+                               'date': datetime.datetime(year=2020, month=1, day=1),
+                               'new_cases': 0.0,
+                               'new_deaths': 0.0, })
+    database.covid_dataset.insert_many(list_to_insert)
+
+
 def check_covid_database() -> bool:
     databases = client.list_database_names()
     if 'covid-project' in databases:
