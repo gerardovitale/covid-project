@@ -27,3 +27,12 @@ def get_covid_new_deaths_per_location_html(location: str):
         output=list(result),
         location=location
     )
+
+
+@app.route('/covid_new_deaths/chart/<location>', methods=['GET'])
+def get_covid_new_deaths_chart(location: str):
+    location = location.capitalize()
+    return render_template(
+        'covid_new_deaths_chart.html',
+        location=location
+    )

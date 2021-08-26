@@ -20,6 +20,7 @@ def home():
                 ],
                 'chart': [
                     '/covid_new_cases/chart/<location>',
+                    '/covid_new_deaths/chart/<location>',
                 ]
             }
         },
