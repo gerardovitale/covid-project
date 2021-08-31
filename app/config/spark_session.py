@@ -1,10 +1,6 @@
 import findspark
 findspark.init('/usr/local/spark-3.1.2-bin-hadoop3.2')
 
-import pymongo
-import pymongo_spark
-pymongo_spark.activate()
-
 from pyspark.sql import SparkSession
 
 
