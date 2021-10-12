@@ -4,8 +4,8 @@ services:
     app:
         build:
             context: ./app
-        image: gerardovitale/covid-project
-        container_name: covid-project
+        image: gerardovitale/covid-pipeline-app
+        container_name: covid-pipeline-app
         ports:
             - "8888:8888"
         working_dir: /app
@@ -32,5 +32,5 @@ services:
         restart: always
         ports: 
             - "27017:27017"
-        volumes: 
+        volumes:
             - /data/db:/data/db
