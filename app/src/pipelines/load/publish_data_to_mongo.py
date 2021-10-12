@@ -3,12 +3,12 @@ from pyspark.sql.functions import to_timestamp
 from config.spark_session import spark
 from config.mongo_config import MONGODB_URI
 
-from pipelines.collect_data_to_plot import collect_total_new_cases, collect_total_new_deaths
+from pipelines.load.collect_data_to_plot import collect_total_new_cases, collect_total_new_deaths
 from pipelines.resources.time_it import time_it
 
 
 @time_it
-def publish_covid_dataset() -> None:
+def publish_covid_data_to_mongo() -> None:
     covid_df = spark.read.parquet('data/covid_dataset.parquet',
                                   inferSchema=True,
                                   header=True)
