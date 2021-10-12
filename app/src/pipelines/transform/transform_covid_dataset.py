@@ -2,11 +2,8 @@ import datetime
 
 import pandas as pd
 
-from config.mongo_config import mongo_client
-from pipelines.resources.time_it import time_it
-
-COVID_URL = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
-COVID_FILE_NAME = 'covid_dataset'
+from src.config.mongo_config import mongo_client
+from src.pipelines.resources.time_it import time_it
 
 
 @time_it

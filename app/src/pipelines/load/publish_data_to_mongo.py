@@ -1,10 +1,10 @@
 from pyspark.sql.functions import to_timestamp
 
-from config.spark_session import spark
-from config.mongo_config import MONGODB_URI
+from src.config.spark_session import spark
+from src.config.mongo_config import MONGODB_URI
 
-from pipelines.load.collect_data_to_plot import collect_total_new_cases, collect_total_new_deaths
-from pipelines.resources.time_it import time_it
+from src.pipelines.load.collect_data_to_plot import collect_total_new_cases, collect_total_new_deaths
+from src.pipelines.resources.time_it import time_it
 
 
 @time_it

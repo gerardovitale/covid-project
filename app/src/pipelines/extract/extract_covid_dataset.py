@@ -1,7 +1,9 @@
 import pandas as pd
 
-from pipelines.transform.transform_covid_dataset import COVID_URL
-from pipelines.resources.time_it import time_it
+from src.pipelines.resources.time_it import time_it
+
+
+COVID_URL = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
 
 
 @time_it

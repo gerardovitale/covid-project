@@ -2,10 +2,12 @@ import sys
 
 import pandas as pd
 
-from config.spark_session import spark
-from pipelines.resources.remove_files import remove_files
-from pipelines.resources.time_it import time_it
-from pipelines.transform.transform_covid_dataset import COVID_FILE_NAME
+from src.config.spark_session import spark
+from src.pipelines.resources.remove_files import remove_files
+from src.pipelines.resources.time_it import time_it
+
+
+COVID_FILE_NAME = 'covid_dataset'
 
 
 @time_it
