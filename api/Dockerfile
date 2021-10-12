@@ -1,12 +1,15 @@
 FROM python:3.8-alpine
-# MAINTAINER Gerardo Vitale
+
+MAINTAINER Gerardo Vitale
+
+LABEL name="PySparkApp" \
+      license="MIT License"
 
 ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements.txt /requirements.txt
-RUN apk update
-RUN apk update \
-    && apk add --no-cache --virtual .tmp-build-deps \
+RUN apk update &&\
+    apk add --no-cache --virtual .tmp-build-deps \
     gcc libc-dev linux-headers
 RUN pip install --upgrade pip && \
     pip install -r /requirements.txt
