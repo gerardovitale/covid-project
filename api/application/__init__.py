@@ -1,5 +1,5 @@
 from flask import Flask
-from Config import DevelopmentConfig
+from application.config.Config import DevelopmentConfig
 
 
 database = DevelopmentConfig().DATABASE_OBJ
