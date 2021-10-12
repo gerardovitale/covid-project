@@ -1,6 +1,15 @@
 from pymongo import MongoClient
 
 
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
 class Config(object):
     """Base config, uses staging database server."""
     TESTING = False
@@ -16,15 +25,15 @@ class Config(object):
 
     @property
     def DATABASE_OBJ(self):
-        return MongoClient(f'mongodb://mongo_db:{self.DB_SERVER}')\
-                .get_database(self.DB_NAME)
+        return MongoClient(f'mongodb://mongo_db:{self.DB_SERVER}') \
+            .get_database(self.DB_NAME)
 
 
-class ProductionConfig(Config):
+class ProductionConfig(Config, metaclass=Singleton):
     pass
 
 
-class DevelopmentConfig(Config):
+class DevelopmentConfig(Config, metaclass=Singleton):
     ENV = 'development'
     DEBUG = True
 
@@ -38,5 +47,5 @@ class DevelopmentConfig(Config):
     DB_NAME = 'covid-project'
 
 
-class TestingConfig(Config):
+class TestingConfig(Config, metaclass=Singleton):
     pass
