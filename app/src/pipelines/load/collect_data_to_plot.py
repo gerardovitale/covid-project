@@ -2,7 +2,7 @@ from pyspark.sql import DataFrame
 
 from src.config.mongo_config import MONGODB_URI_COVID
 from src.config.spark_session import spark
-from src.pipelines.resources.time_it import time_it
+from src.resources.time_it import time_it
 
 
 @time_it

@@ -4,7 +4,7 @@ from src.config.spark_session import spark
 from src.config.mongo_config import MONGODB_URI
 
 from src.pipelines.load.collect_data_to_plot import collect_total_new_cases, collect_total_new_deaths
-from src.pipelines.resources.time_it import time_it
+from src.resources.time_it import time_it
 
 
 @time_it

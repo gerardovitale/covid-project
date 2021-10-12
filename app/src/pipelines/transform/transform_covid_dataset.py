@@ -3,7 +3,7 @@ import datetime
 import pandas as pd
 
 from src.config.mongo_config import mongo_client
-from src.pipelines.resources.time_it import time_it
+from src.resources.time_it import time_it
 
 
 @time_it
