@@ -22,7 +22,7 @@ services:
         ports:
             - "5000:5000"
         working_dir: /api
-        command: sh -c "python run.py"
+        command: sh -c "python -u run.py"
         volumes:
             - ./api/:/api
 
