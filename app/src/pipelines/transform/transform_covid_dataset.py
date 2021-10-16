@@ -8,9 +8,9 @@ from src.resources.time_it import time_it
 
 @time_it
 def manage_null_values(covid_data: pd.DataFrame) -> pd.DataFrame:
-    # remove records when continent is null
-    covid_data = covid_data[covid_data.continent.notnull()]
-    #
+
+    covid_data = covid_data.loc[covid_data.continent.notnull()]
+
     mask = covid_data.new_cases.isnull()
     covid_data.loc[mask, 'new_cases'] = 0
 
