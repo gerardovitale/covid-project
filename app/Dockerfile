@@ -15,6 +15,8 @@ MAINTAINER Gerardo Vitale
 LABEL name="PySparkApp" \
       license="MIT License"
 
+ENV PYTHONUNBUFFERED 1
+
 ARG CONTAINER_BASE_DIR="/app"
 ARG LOCAL_PROJECT_MODULE="/app"
 ARG JUPYTER_PORT=8888
@@ -82,8 +84,10 @@ EXPOSE ${JUPYTER_PORT}
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 ENV TINI_VERSION v0.6.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
-RUN chmod +x /usr/bin/tini
+
+RUN chmod +x /usr/bin/tini && \
+    chmod +x ./run_app.sh
+
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
-CMD ["python", "-u", "app.py"]
+CMD ["bash", "./run_app.sh"]
