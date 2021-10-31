@@ -22,9 +22,6 @@ services:
         ports:
             - "5000:5000"
         working_dir: /api
-        command: sh -c "python -u run.py"
-        volumes:
-            - ./api/:/api
 
     mongo_db:
         image: mongo:3.2
@@ -32,5 +29,3 @@ services:
         restart: always
         ports: 
             - "27017:27017"
-        volumes:
-            - /data/db:/data/db
