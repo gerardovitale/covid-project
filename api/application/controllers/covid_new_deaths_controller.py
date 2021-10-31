@@ -1,11 +1,13 @@
-from flask import render_template
+from flask import Blueprint, render_template
 
-from application import app, database
-
+from application import DevelopmentConfig
 from application.services.covid_new_deaths_service import find_covid_new_deaths
 
+covid_new_deaths_bp = Blueprint('covid_new_deaths_bp', __name__)
+database = DevelopmentConfig().DATABASE_OBJ
 
-@app.route('/covid_new_deaths/json/<location>', methods=['GET'])
+
+@covid_new_deaths_bp.route('/covid_new_deaths/json/<location>', methods=['GET'])
 def get_covid_new_deaths_per_location(location: str):
     location = location.capitalize()
     result = find_covid_new_deaths(database, location)
@@ -18,7 +20,7 @@ def get_covid_new_deaths_per_location(location: str):
     }
 
 
-@app.route('/covid_new_deaths/table/<location>', methods=['GET'])
+@covid_new_deaths_bp.route('/covid_new_deaths/table/<location>', methods=['GET'])
 def get_covid_new_deaths_per_location_html(location: str):
     location = location.capitalize()
     result = find_covid_new_deaths(database, location)
@@ -29,7 +31,7 @@ def get_covid_new_deaths_per_location_html(location: str):
     )
 
 
-@app.route('/covid_new_deaths/chart/<location>', methods=['GET'])
+@covid_new_deaths_bp.route('/covid_new_deaths/chart/<location>', methods=['GET'])
 def get_covid_new_deaths_chart(location: str):
     location = location.capitalize()
     return render_template(

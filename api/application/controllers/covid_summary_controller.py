@@ -1,14 +1,17 @@
-from flask import render_template, request
+from flask import Blueprint, render_template, request
 
-from application import app, database
+from application import DevelopmentConfig
 from application.controllers.helpers import (get_params_covid_summary,
                                              get_params_pagination)
 from application.services.covid_summary_service import (calculate_rates,
                                                         find_covid_summary,
                                                         paginate_mongo_data)
 
+covid_summary_bp = Blueprint('covid_summary_bp', __name__)
+database = DevelopmentConfig().DATABASE_OBJ
 
-@app.route('/covid_summary/json/<location>', methods=['GET'])
+
+@covid_summary_bp.route('/covid_summary/json/<location>', methods=['GET'])
 def get_covid_summary(location: str):
     location, days = get_params_covid_summary(request, location)
     summary = find_covid_summary(database, days, location)
@@ -21,7 +24,7 @@ def get_covid_summary(location: str):
     }
 
 
-@app.route('/covid_summary/table/<location>', methods=['GET'])
+@covid_summary_bp.route('/covid_summary/table/<location>', methods=['GET'])
 def get_covid_summary_html(location: str):
     location, days = get_params_covid_summary(request, location)
     start, width, nav_offsets = get_params_pagination(request)
