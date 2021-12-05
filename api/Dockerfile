@@ -27,5 +27,6 @@ ENV PATH=/opt/venv/bin:$PATH \
     PYTHONUNBUFFERED=1
 
 COPY . /api/
+WORKDIR /api
 
 ENTRYPOINT ["python", "-u", "run.py"]

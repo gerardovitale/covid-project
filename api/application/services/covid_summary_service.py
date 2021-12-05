@@ -1,10 +1,12 @@
 import datetime
 from typing import Any, Dict, List
 
-from pymongo import MongoClient, CursorType, DESCENDING
+from pymongo import DESCENDING
+from pymongo.cursor import Cursor
+from pymongo.database import Database
 
 
-def find_covid_summary(database: MongoClient, days: int, location: str) -> CursorType:
+def find_covid_summary(database: Database, days: int, location: str) -> Cursor:
     to_date = datetime.datetime.today()
     from_date = to_date - datetime.timedelta(days=days)
     query = {'$and': [{'date': {'$gte': from_date,
@@ -24,11 +26,11 @@ def find_covid_summary(database: MongoClient, days: int, location: str) -> Curso
     return result
 
 
-def paginate_mongo_data(mongo_data: CursorType, start: int, width: int) -> CursorType:
+def paginate_mongo_data(mongo_data: Cursor, start: int, width: int) -> Cursor:
     return mongo_data.skip(start).limit(width)
 
 
-def calculate_rates(mongo_data: CursorType) -> List[Dict[str, Any]]:
+def calculate_rates(mongo_data: Cursor) -> List[Dict[str, Any]]:
     mongo_data = list(mongo_data)
     for doc in mongo_data:
         doc['infected_rate'] = doc['total_cases'] / doc['population'] * 100

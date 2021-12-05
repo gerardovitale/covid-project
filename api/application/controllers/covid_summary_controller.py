@@ -15,10 +15,10 @@ database = DevelopmentConfig().DATABASE_OBJ
 def get_covid_summary(location: str):
     location, days = get_params_covid_summary(request, location)
     summary = find_covid_summary(database, days, location)
-    record_count = summary.count()
+    result = list(summary)
     return {
-        'result': list(summary),
-        'result_count': record_count,
+        'result': result,
+        'result_count': result.__len__(),
         'route': f'/covid_summary/json/{location}',
         'status': 200,
     }
@@ -30,8 +30,8 @@ def get_covid_summary_html(location: str):
     start, width, nav_offsets = get_params_pagination(request)
     summary = find_covid_summary(database, days, location)
     summary = paginate_mongo_data(summary, start, width)
-    record_count = summary.count()
     summary = calculate_rates(summary)
+    record_count = summary.__len__()
     return render_template(
         'covid_summary.html',
         output=summary,

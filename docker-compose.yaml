@@ -24,7 +24,7 @@ services:
         working_dir: /api
 
     mongo_db:
-        image: mongo:3.2
+        image: mongo:3.6
         container_name: mongo_db
         restart: always
         ports: 

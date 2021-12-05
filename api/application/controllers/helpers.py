@@ -1,5 +1,7 @@
 from typing import Any, Dict, Tuple
+
 from flask import Request
+from pymongo.cursor import Cursor
 
 
 def get_params_covid_summary(req: Request, location: str) -> Tuple[str, int]:
@@ -26,3 +28,10 @@ def get_params_pagination(req: Request) -> Tuple[int, int, Dict[str, Any]]:
     width = end - start
     nav_offsets = get_navigation_offsets(start, end, 20)
     return start, width, nav_offsets
+
+
+def add_thousand_separator(mongo_data: Cursor, col_name: str) -> list:
+    mongo_data = list(mongo_data)
+    for row in mongo_data:
+        row[col_name] = '{0:,}'.format(int(row[col_name]))
+    return mongo_data

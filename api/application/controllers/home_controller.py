@@ -14,6 +14,7 @@ def home():
                     '/covid_summary/json/<location>',
                     '/covid_new_cases/json/<location>',
                     '/covid_new_deaths/json/<location>',
+                    '/vaccination_summary/json/<location>',
                 ],
                 'tables': [
                     '/covid_summary/table/<location>',
