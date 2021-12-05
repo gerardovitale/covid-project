@@ -8,18 +8,10 @@ from src.resources.time_it import time_it
 
 @time_it
 def manage_null_values(covid_data: pd.DataFrame) -> pd.DataFrame:
-
-    covid_data = covid_data.loc[covid_data.continent.notnull()]
-
-    mask = covid_data.new_cases.isnull()
-    covid_data.loc[mask, 'new_cases'] = 0
-
-    mask = covid_data.new_deaths.isnull()
-    covid_data.loc[mask, 'new_deaths'] = 0
-
-    mask = covid_data.tests_units.isnull()
-    covid_data.loc[mask, 'tests_units'] = 'not available'
-
+    covid_data = covid_data.dropna(subset=['continent'])
+    covid_data.loc[covid_data.new_cases.isnull(), 'new_cases'] = 0
+    covid_data.loc[covid_data.new_deaths.isnull(), 'new_deaths'] = 0
+    covid_data.loc[covid_data.tests_units.isnull(), 'tests_units'] = 'not available'
     return covid_data
 
 
