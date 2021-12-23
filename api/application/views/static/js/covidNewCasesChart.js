@@ -1,6 +1,6 @@
 const country = document.getElementById('country').value
 
-fetch('http://localhost:5000/covid_new_cases/json/' + country)
+fetch('http://localhost:5001/covid_new_cases/json/' + country)
     .then(response => response.json())
     .then(mongoData => printCharts(mongoData))
 

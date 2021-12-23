@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from pymongo.database import Database
 
 
 class Singleton(type):
@@ -11,7 +12,6 @@ class Singleton(type):
 
 
 class Config(object):
-    """Base config, uses staging database server."""
     TESTING = False
     DEBUG = False
     DB_SERVER = None
@@ -20,11 +20,11 @@ class Config(object):
     TEMPLATE_FOLDER = None
 
     @property
-    def DATABASE_URI(self):
+    def DATABASE_URI(self) -> str:
         return f'mongodb://mongo_db:{self.DB_SERVER}/{self.DB_NAME}'
 
     @property
-    def DATABASE_OBJ(self):
+    def DATABASE_OBJ(self) -> Database:
         return MongoClient(f'mongodb://mongo_db:{self.DB_SERVER}') \
             .get_database(self.DB_NAME)
 
@@ -38,7 +38,7 @@ class DevelopmentConfig(Config, metaclass=Singleton):
     DEBUG = True
 
     HOST = '0.0.0.0'
-    PORT = 5000
+    PORT = 5001
 
     STATIC_FOLDER = 'views/static'
     TEMPLATE_FOLDER = 'views/templates'
@@ -48,4 +48,10 @@ class DevelopmentConfig(Config, metaclass=Singleton):
 
 
 class TestingConfig(Config, metaclass=Singleton):
-    pass
+    ENV = 'testing'
+    TESTING = True
+    DEBUG = True
+    WTF_CSRF_ENABLED = False
+
+    DB_SERVER = '27017'
+    DB_NAME = 'covid-project'

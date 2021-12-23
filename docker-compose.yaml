@@ -20,7 +20,7 @@ services:
         image: gerardovitale/covid-api
         container_name: covid-api
         ports:
-            - "5000:5000"
+            - "5001:5001"
         working_dir: /api
 
     mongo_db:
