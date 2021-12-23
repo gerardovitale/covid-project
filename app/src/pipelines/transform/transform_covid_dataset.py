@@ -23,6 +23,6 @@ def add_missing_january_records_mongodb():
     for each_loc in locations:
         list_to_insert.append({'location': each_loc,
                                'date': datetime.datetime(year=2020, month=1, day=1),
-                               'new_cases': 0.0,
-                               'new_deaths': 0.0, })
+                               'new_cases': 0,
+                               'new_deaths': 0, })
     database.covid_dataset.insert_many(list_to_insert)
