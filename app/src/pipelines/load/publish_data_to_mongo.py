@@ -14,30 +14,30 @@ def publish_covid_data_to_mongo() -> None:
                                   header=True)
     covid_df = covid_df.withColumn('date', to_timestamp(covid_df.date))
     covid_df.write.format('mongo') \
-                  .mode('append') \
-                  .option('uri', MONGODB_URI) \
-                  .option('database', 'covid-project') \
-                  .option('collection', 'covid_dataset') \
-                  .save()
+        .mode('append') \
+        .option('uri', MONGODB_URI) \
+        .option('database', 'covid-project') \
+        .option('collection', 'covid_dataset') \
+        .save()
 
 
 @time_it
 def publish_total_new_cases_chart_data() -> None:
     total_new_cases = collect_total_new_cases()
     total_new_cases.write.format('mongo') \
-                         .mode('append') \
-                         .option('uri', MONGODB_URI) \
-                         .option('database', 'covid-project') \
-                         .option('collection', 'total_new_cases_chart_data') \
-                         .save()
+        .mode('append') \
+        .option('uri', MONGODB_URI) \
+        .option('database', 'covid-project') \
+        .option('collection', 'total_new_cases_chart_data') \
+        .save()
 
 
 @time_it
 def publish_total_new_deaths_chart_data() -> None:
     total_new_cases = collect_total_new_deaths()
     total_new_cases.write.format('mongo') \
-                         .mode('append') \
-                         .option('uri', MONGODB_URI) \
-                         .option('database', 'covid-project') \
-                         .option('collection', 'total_new_deaths_chart_data') \
-                         .save()
+        .mode('append') \
+        .option('uri', MONGODB_URI) \
+        .option('database', 'covid-project') \
+        .option('collection', 'total_new_deaths_chart_data') \
+        .save()
