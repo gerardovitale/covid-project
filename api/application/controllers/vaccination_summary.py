@@ -14,7 +14,7 @@ def get_vaccination_summary_json(location: str) -> dict:
     record_count = mongo_data.__len__()
     summary = calculate_vaccination_rate(mongo_data)
     return {
-        'result': summary,
+        'result': list(summary),
         'result_count': record_count,
         'route': f'/covid_summary/json/{location}',
         'status': 200,

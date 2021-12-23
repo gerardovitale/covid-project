@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict, List
+from typing import List
 
 from pymongo import DESCENDING
 from pymongo.cursor import Cursor
@@ -25,7 +25,7 @@ def find_vaccination_summary(database: Database, days: int, location: str) -> Cu
     return result
 
 
-def calculate_vaccination_rate(mongo_data: List) -> List[Dict[str, float]]:
+def calculate_vaccination_rate(mongo_data: List):
     """
     AVG(people_vaccinated / population * 100) AS vaccination_rate,
     AVG(people_fully_vaccinated / population * 100) AS fully_vaccination_rate,
@@ -36,4 +36,4 @@ def calculate_vaccination_rate(mongo_data: List) -> List[Dict[str, float]]:
         doc['fully_vaccination_rate'] = doc['people_fully_vaccinated'] / doc['population'] * 100
         doc['new_vaccination_rate'] = \
             doc['new_vaccinations'] / (doc['population'] - doc['people_fully_vaccinated']) * 100
-    return mongo_data
+        yield mongo_data
