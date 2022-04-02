@@ -1,3 +1,4 @@
+from src.config.logger import LOGGER
 from src.pipelines.extract.extract_covid_dataset import get_covid_dataset
 from src.pipelines.load.publish_data_to_mongo import (publish_covid_data_to_mongo,
                                                       publish_total_new_cases_chart_data,

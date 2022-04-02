@@ -1,0 +1,15 @@
+FROM datamechanics/spark:3.1.1-hadoop-3.2.0-java-8-scala-2.12-python-3.8-latest
+
+ARG CONTAINER_BASE_DIR="/app"
+ARG LOCAL_PROJECT_MODULE="/app"
+ARG LOCAL_TEST_MODULE="tests"
+
+ENV PYSPARK_MAJOR_PYTHON_VERSION=3
+
+COPY ${LOCAL_PROJECT_MODULE}/requirements.txt ${CONTAINER_BASE_DIR}/requirements.txt
+
+RUN pip install --user --upgrade pip && \
+    pip install --user --no-cache-dir -r ${CONTAINER_BASE_DIR}/requirements.txt && \
+    rm ${CONTAINER_BASE_DIR}/requirements.txt
+
+COPY ./app/src ${CONTAINER_BASE_DIR}/

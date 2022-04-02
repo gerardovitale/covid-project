@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template
 
-from application import DevelopmentConfig
-from application.controllers.helpers import add_thousand_separator
-from application.services.covid_new_deaths_service import find_covid_new_deaths
+from src import DevelopmentConfig
+from src.controllers.helpers import add_thousand_separator
+from src.services.covid_new_deaths_service import find_covid_new_deaths
 
 covid_new_deaths_bp = Blueprint('covid_new_deaths_bp', __name__)
 database = DevelopmentConfig().DATABASE_OBJ

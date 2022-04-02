@@ -6,8 +6,6 @@ services:
             context: ./app
         image: gerardovitale/covid-pipeline-app
         container_name: covid-pipeline-app
-        ports:
-            - "8888:8888"
         working_dir: /app
         volumes:
             - ./app/:/app

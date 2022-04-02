@@ -1,4 +1,4 @@
-from application import init_app, DevelopmentConfig
+from src import init_app, DevelopmentConfig
 
 
 if __name__ == "__main__":
