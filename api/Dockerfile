@@ -26,7 +26,7 @@ ENV PATH=/opt/venv/bin:$PATH \
     PYTHONPATH=/opt/venv/bin:$PYTHONPATH \
     PYTHONUNBUFFERED=1
 
-COPY . /api/
-WORKDIR /api
+COPY ./src/ /app/
+WORKDIR /app
 
-ENTRYPOINT ["python", "-u", "run.py"]
+ENTRYPOINT ["python", "-u", "entrypoint/run.py"]

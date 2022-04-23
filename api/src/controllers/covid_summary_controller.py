@@ -1,11 +1,8 @@
 from flask import Blueprint, render_template, request
 
-from src import DevelopmentConfig
-from src.controllers.helpers import (get_params_covid_summary,
-                                     get_params_pagination)
-from src.services.covid_summary_service import (calculate_rates,
-                                                find_covid_summary,
-                                                paginate_mongo_data)
+from config.Config import DevelopmentConfig
+from controllers.helpers import get_params_covid_summary, get_params_pagination
+from services.covid_summary_service import find_covid_summary, paginate_mongo_data, calculate_rates
 
 covid_summary_bp = Blueprint('covid_summary_bp', __name__)
 database = DevelopmentConfig().DATABASE_OBJ

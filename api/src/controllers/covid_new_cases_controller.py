@@ -1,8 +1,10 @@
+import os
+
 from flask import Blueprint, render_template
 
-from src import DevelopmentConfig
-from src.controllers.helpers import add_thousand_separator
-from src.services.covid_new_cases_service import find_covid_new_cases
+from config.Config import DevelopmentConfig
+from controllers.helpers import add_thousand_separator
+from services.covid_new_cases_service import find_covid_new_cases
 
 covid_new_cases_bp = Blueprint('covid_new_cases_bp', __name__)
 database = DevelopmentConfig().DATABASE_OBJ
@@ -36,6 +38,8 @@ def get_covid_new_cases_per_location_html(location: str):
 @covid_new_cases_bp.route('/covid_new_cases/chart/<location>', methods=['GET'])
 def get_covid_new_cases_chart(location: str):
     location = location.capitalize()
+    print('[DEBUG]', DevelopmentConfig.TEMPLATE_FOLDER)
+    print('[DEBUG]', os.getcwd())
     return render_template(
         'covid_new_cases_chart.html',
         location=location

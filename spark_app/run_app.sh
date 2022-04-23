@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# run pipeline-app
+# run pipeline-spark_app
 python app.py
 
 # start jupyter notebook

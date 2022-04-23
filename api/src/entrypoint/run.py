@@ -1,4 +1,5 @@
-from src import init_app, DevelopmentConfig
+from config.Config import DevelopmentConfig
+from entrypoint import init_app
 
 
 if __name__ == "__main__":

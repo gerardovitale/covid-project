@@ -40,8 +40,8 @@ class DevelopmentConfig(Config, metaclass=Singleton):
     HOST = '0.0.0.0'
     PORT = 5001
 
-    STATIC_FOLDER = 'views/static'
-    TEMPLATE_FOLDER = 'views/templates'
+    STATIC_FOLDER = '/app/views/static/'
+    TEMPLATE_FOLDER = '/app/views/templates/'
 
     DB_SERVER = '27017'
     DB_NAME = 'covid-project'

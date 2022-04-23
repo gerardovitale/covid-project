@@ -1,9 +1,9 @@
 from flask import request, render_template, Blueprint
 
-from src import DevelopmentConfig
-from src.controllers.helpers import get_params_pagination
-from src.services.covid_summary_service import paginate_mongo_data
-from src.services.vaccination_summary_service import find_vaccination_summary, calculate_vaccination_rate
+from config.Config import DevelopmentConfig
+from controllers.helpers import get_params_pagination
+from services.covid_summary_service import paginate_mongo_data
+from services.vaccination_summary_service import find_vaccination_summary, calculate_vaccination_rate
 
 database = DevelopmentConfig().DATABASE_OBJ
 vaccination_bp = Blueprint('vaccination_bp', __name__)

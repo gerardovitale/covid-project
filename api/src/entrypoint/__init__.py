@@ -1,10 +1,11 @@
 from flask import Flask
-from src.config.Config import DevelopmentConfig, Config
-from src.controllers.home_controller import home_bp
-from src.controllers.covid_summary_controller import covid_summary_bp
-from src.controllers.covid_new_cases_controller import covid_new_cases_bp
-from src.controllers.covid_new_deaths_controller import covid_new_deaths_bp
-from src.controllers.vaccination_summary_controller import vaccination_bp
+
+from config.Config import Config
+from controllers.covid_new_cases_controller import covid_new_cases_bp
+from controllers.covid_new_deaths_controller import covid_new_deaths_bp
+from controllers.covid_summary_controller import covid_summary_bp
+from controllers.home_controller import home_bp
+from controllers.vaccination_summary_controller import vaccination_bp
 
 
 def init_app(config: Config):

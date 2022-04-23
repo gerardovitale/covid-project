@@ -3,12 +3,12 @@ version: "3"
 services:
     app:
         build:
-            context: ./app
+            context: spark_app
         image: gerardovitale/covid-pipeline-app
         container_name: covid-pipeline-app
-        working_dir: /app
+        working_dir: /spark_app
         volumes:
-            - ./app/:/app
+            - ./spark_app/:/spark_app
         depends_on:
             - mongo_db
 
@@ -19,7 +19,6 @@ services:
         container_name: covid-api
         ports:
             - "5001:5001"
-        working_dir: /api
 
     mongo_db:
         image: mongo:3.6

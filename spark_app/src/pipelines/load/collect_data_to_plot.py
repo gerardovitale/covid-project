@@ -7,9 +7,9 @@ from src.resources.time_it import time_it
 
 @time_it
 def collect_total_new_cases() -> DataFrame:
-    covid_df = spark.read.format('mongo')\
-                         .option('uri', MONGODB_URI_COVID)\
-                         .load()
+    covid_df = spark.read.format('mongo') \
+        .option('uri', MONGODB_URI_COVID) \
+        .load()
     covid_df.createOrReplaceTempView('mongo_covid')
     total_new_cases = spark.sql('''
         SELECT YEAR(date) as year, MONTH(date) as month, 
@@ -24,8 +24,8 @@ def collect_total_new_cases() -> DataFrame:
 @time_it
 def collect_total_new_deaths() -> DataFrame:
     covid_df = spark.read.format('mongo') \
-                         .option('uri', MONGODB_URI_COVID) \
-                         .load()
+        .option('uri', MONGODB_URI_COVID) \
+        .load()
     covid_df.createOrReplaceTempView('mongo_covid')
     total_new_deaths = spark.sql('''
         SELECT YEAR(date) as year, MONTH(date) as month, 
