@@ -1,6 +1,6 @@
 import pandas as pd
 
-from src.resources.time_it import time_it
+from resources.time_it import time_it
 
 COVID_URL = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
 

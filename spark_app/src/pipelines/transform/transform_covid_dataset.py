@@ -2,13 +2,13 @@ import datetime
 
 import pandas as pd
 
-from src.config.mongo_config import mongo_client
-from src.resources.time_it import time_it
+from config.mongo_config import mongo_client
+from resources.time_it import time_it
 
 
 @time_it
 def manage_null_values(covid_data: pd.DataFrame) -> pd.DataFrame:
-    covid_data = covid_data.dropna(subset=['continent'])
+    covid_data.dropna(subset=['continent'], inplace=True)
     covid_data.loc[covid_data.new_cases.isnull(), 'new_cases'] = 0
     covid_data.loc[covid_data.new_deaths.isnull(), 'new_deaths'] = 0
     covid_data.loc[covid_data.tests_units.isnull(), 'tests_units'] = 'not available'

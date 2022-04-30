@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block body %}
+<style>
+  .center-table{
+    padding-left: 2.5%;
+    padding-right: 20%;
+  }
+  .table td, .table th{
+    width: 1%;
+    white-space: nowrap;
+  }
+</style>
+  <div class="center-table">
+    <p class="lead">Summary</p>
+    <table class="table table-condensed table-striped" style="width: auto">
+      <thead>
+        <th>#</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Population</th>
+        <th>new_vaccinations</th>
+        <th>people_vaccinated</th>
+        <th>vaccination_rate</th>
+        <th>people_fully_vaccinated</th>
+        <th>fully_vaccination_rate</th>
+      </thead>
+      <tbody>
+        {% for item in output %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{item.date}}</td>
+          <td>{{item.location}}</td>
+          <td>{{item.population}}</td>
+          <td>{{item.new_vaccinations}}</td>
+          <td>{{item.people_vaccinated}}</td>
+          <td>{{item.vaccination_rate}}</td>
+          <td>{{item.people_fully_vaccinated}}</td>
+          <td>{{item.fully_vaccination_rate}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% import "macros.jnj" as common %}
+  {% if nav_offsets and nav_path -%}
+    {{ common.display_nav(nav_offsets, nav_path, record_count, location, days, query)|safe }}
+  {% endif -%}
+{% endblock %}

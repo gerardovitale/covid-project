@@ -1,6 +1,4 @@
-import os
-
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, Response
 
 from config.Config import DevelopmentConfig
 from controllers.helpers import add_thousand_separator
@@ -38,8 +36,6 @@ def get_covid_new_cases_per_location_html(location: str):
 @covid_new_cases_bp.route('/covid_new_cases/chart/<location>', methods=['GET'])
 def get_covid_new_cases_chart(location: str):
     location = location.capitalize()
-    print('[DEBUG]', DevelopmentConfig.TEMPLATE_FOLDER)
-    print('[DEBUG]', os.getcwd())
     return render_template(
         'covid_new_cases_chart.html',
         location=location

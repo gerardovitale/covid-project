@@ -1,8 +1,8 @@
-from src.pipelines.extract.extract_covid_dataset import get_covid_dataset
-from src.pipelines.load.publish_data_to_mongo import publish_covid_data_to_mongo, publish_total_new_cases_chart_data, \
+from pipelines.extract.extract_covid_dataset import get_covid_dataset
+from pipelines.load.publish_data_to_mongo import publish_covid_data_to_mongo, publish_total_new_cases_chart_data, \
     publish_total_new_deaths_chart_data
-from src.pipelines.load.save_data_locally import save_covid_data_locally
-from src.pipelines.transform.transform_covid_dataset import manage_null_values, add_missing_january_records_mongodb
+from pipelines.load.save_data_locally import save_covid_data_locally
+from pipelines.transform.transform_covid_dataset import manage_null_values, add_missing_january_records_mongodb
 
 
 def launch_data_pipeline() -> None:

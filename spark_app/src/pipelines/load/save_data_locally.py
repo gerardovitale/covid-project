@@ -2,9 +2,9 @@ import sys
 
 import pandas as pd
 
-from src.config.spark_session import spark
-from src.resources.remove_files import remove_files
-from src.resources.time_it import time_it
+from config.spark_session import spark
+from resources.remove_files import remove_files
+from resources.time_it import time_it
 
 COVID_FILE_NAME = 'covid_dataset'
 
