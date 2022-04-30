@@ -3,12 +3,12 @@ version: "3"
 services:
     spark_app:
         build:
-            context: spark_app
+            context: app
         image: gerardovitale/covid-spark-pipeline
         container_name: covid-spark-pipeline
         volumes:
-            - ./data:/app/data
-            - ./notebooks:/app/notebooks
+            - ./app/data:/app/data
+            - ./app/notebooks:/app/notebooks
         depends_on:
             - mongo_db
 
