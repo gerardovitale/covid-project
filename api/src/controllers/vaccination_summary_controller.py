@@ -37,7 +37,7 @@ def get_vaccination_summary_table(location: str) -> str:
     summary = calculate_vaccination_rate(mongo_data)
     return render_template(
         'vaccination_summary.html',
-        output=summary,
+        output=list(summary),
         location=location,
         days=days,
         record_count=record_count,

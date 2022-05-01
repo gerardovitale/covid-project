@@ -9,18 +9,10 @@ from pymongo.database import Database
 def find_vaccination_summary(database: Database, days: int, location: str) -> Cursor:
     to_date = datetime.datetime.today()
     from_date = to_date - datetime.timedelta(days=days)
-    query = {'$and': [{'date': {'$gte': from_date,
-                                '$lte': to_date}},
-                      {'location': location}]}
-    project = {
-        '_id': 0,
-        'date': 1,
-        'location': 1,
-        'population': 1,
-        'new_vaccinations': 1,
-        'people_vaccinated': 1,
-        'people_fully_vaccinated': 1,
-    }
+    query = {'$and': [{'date': {'$gte': from_date, '$lte': to_date}}, {'location': location}]}
+    project = {'_id': 0, 'date': 1, 'location': 1, 'population': 1, 'new_vaccinations': 1,
+               'people_vaccinated': 1, 'people_fully_vaccinated': 1,
+               }
     result = database['covid_dataset'].find(query, project).sort('date', DESCENDING)
     return result
 
@@ -36,4 +28,4 @@ def calculate_vaccination_rate(mongo_data: List):
         doc['fully_vaccination_rate'] = doc['people_fully_vaccinated'] / doc['population'] * 100
         doc['new_vaccination_rate'] = \
             doc['new_vaccinations'] / (doc['population'] - doc['people_fully_vaccinated']) * 100
-        yield mongo_data
+    return mongo_data
