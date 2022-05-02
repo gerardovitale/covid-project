@@ -1,0 +1,18 @@
+{% extends "chart_layout.html" %}
+{% block body %}
+    <input type="hidden" value="{{ location }}" id="country">
+    <input type="hidden" value="{{ days }}" id="period">
+
+    <h1>Covid Dashboard</h1>
+    <p>Country: {{ location }}, Period: {{ days }}</p>
+
+    <section class="cols-2">
+        <figure>
+            <p>Covid new cases vs new deaths</p>
+            <canvas id="chart1"></canvas>
+        </figure>
+
+    </section>
+
+    <script src="/static/js/covidSummaryDashboard.js" type="application/javascript"></script>
+{% endblock %}
